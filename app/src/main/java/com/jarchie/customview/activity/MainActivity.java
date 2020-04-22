@@ -1,14 +1,18 @@
 package com.jarchie.customview.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.os.Bundle;
-import android.view.animation.DecelerateInterpolator;
 
 import com.jarchie.customview.R;
-import com.jarchie.customview.view.QQStepView;
+import com.jarchie.customview.adapter.MainAdapter;
+import com.jarchie.customview.bean.MainBean;
+import com.jarchie.customview.databinding.ActivityMainBinding;
+import com.jarchie.customview.viewmodel.MainViewModel;
+
+import java.util.List;
 
 /**
  * 作者: 乔布奇
@@ -16,24 +20,22 @@ import com.jarchie.customview.view.QQStepView;
  * 邮箱: jarchie520@gmail.com
  * 描述: 主Activity
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainViewModel.DataListener {
+
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        final QQStepView stepView = findViewById(R.id.stepView);
-        //属性动画 后面会说
-        ValueAnimator valueAnimator = ObjectAnimator.ofFloat(0, 12000);
-        valueAnimator.setDuration(1200);
-        valueAnimator.setInterpolator(new DecelerateInterpolator());
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float currentStep = (float) animation.getAnimatedValue();
-                stepView.setCurrentStep((int) currentStep);
-            }
-        });
-        valueAnimator.start();
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        MainViewModel mainViewModel = new MainViewModel(this);
+        binding.setViewModel(mainViewModel);
+    }
+
+    @Override
+    public void loadMainData(List<MainBean> list) {
+        MainAdapter mAdapter = new MainAdapter(this, list);
+        binding.mRecycler.setAdapter(mAdapter);
+        binding.mRecycler.setLayoutManager(new LinearLayoutManager(this));
     }
 }

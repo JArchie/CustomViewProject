@@ -14,6 +14,7 @@ import android.view.View;
 import androidx.annotation.Nullable;
 
 import com.jarchie.customview.R;
+import com.jarchie.customview.utils.TransferUtil;
 
 /**
  * 作者: 乔布奇
@@ -41,7 +42,7 @@ public class TextView extends View {
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.TextView);
         mText = array.getString(R.styleable.TextView_archieText);
         mTextColor = array.getColor(R.styleable.TextView_archieTextColor, mTextColor);
-        mTextSize = array.getDimensionPixelSize(R.styleable.TextView_archieTextSize, sp2px(mTextSize));
+        mTextSize = array.getDimensionPixelSize(R.styleable.TextView_archieTextSize, TransferUtil.sp2px(mTextSize));
         array.recycle();
         mPaint = new Paint();
         mPaint.setAntiAlias(true); //抗锯齿
@@ -49,10 +50,7 @@ public class TextView extends View {
         mPaint.setColor(mTextColor); //画笔颜色
     }
 
-    //sp转px
-    private int sp2px(int sp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, getResources().getDisplayMetrics());
-    }
+
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

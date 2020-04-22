@@ -14,6 +14,7 @@ import android.view.View;
 import androidx.annotation.Nullable;
 
 import com.jarchie.customview.R;
+import com.jarchie.customview.utils.TransferUtil;
 
 /**
  * 作者: 乔布奇
@@ -25,9 +26,10 @@ public class QQStepView extends View {
     private int mOurterColor = Color.RED;
     private int mInnerColor = Color.BLUE;
     private int mBorderWidth = 20;
-    private int mStepTextSize = 16;
+    private int mStepTextSize = 20;
+    private int mStepTipSize = 32;
     private int mStepTextColor = Color.RED;
-    private Paint mOurterPaint, mInnerPaint,mTextPaint;
+    private Paint mOurterPaint, mInnerPaint, mTextPaint,mStepPaint;
     private int mStepMax; //总步数
     private int mCurrentStep; //当前步数
 
@@ -45,8 +47,9 @@ public class QQStepView extends View {
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.QQStepView);
         mOurterColor = array.getColor(R.styleable.QQStepView_outerColor, mOurterColor);
         mInnerColor = array.getColor(R.styleable.QQStepView_innerColor, mInnerColor);
-        mBorderWidth = array.getColor(R.styleable.QQStepView_stepBorderWidth, mBorderWidth);
-        mStepTextSize = array.getColor(R.styleable.QQStepView_stepTextSize, mStepTextSize);
+        mBorderWidth = array.getDimensionPixelSize(R.styleable.QQStepView_stepBorderWidth, mBorderWidth);
+        mStepTextSize = array.getDimensionPixelSize(R.styleable.QQStepView_stepTextSize, TransferUtil.sp2px(mStepTextSize));
+        mStepTipSize = array.getDimensionPixelSize(R.styleable.QQStepView_stepTipSize, TransferUtil.sp2px(mStepTipSize));
         mStepTextColor = array.getColor(R.styleable.QQStepView_stepTextColor, mStepTextColor);
         array.recycle();
         //设置外圆画笔
@@ -63,11 +66,16 @@ public class QQStepView extends View {
         mInnerPaint.setColor(mInnerColor);
         mInnerPaint.setStrokeCap(Paint.Cap.ROUND); //设置下方为圆弧形
         mInnerPaint.setStyle(Paint.Style.STROKE); //画笔空心
-        //设置文字画笔
+        //设置提示文字画笔
         mTextPaint = new Paint();
         mTextPaint.setAntiAlias(true);
         mTextPaint.setColor(mStepTextColor);
-        mTextPaint.setTextSize(mStepTextSize);
+        mTextPaint.setTextSize(mStepTipSize);
+        //设置步数画笔
+        mStepPaint = new Paint();
+        mStepPaint.setAntiAlias(true);
+        mStepPaint.setColor(mStepTextColor);
+        mStepPaint.setTextSize(mStepTextSize);
     }
 
     @Override
@@ -89,30 +97,43 @@ public class QQStepView extends View {
 //        int radius = getWidth() / 2 - mBorderWidth / 2;
         @SuppressLint("DrawAllocation")
 //        RectF rectF = new RectF(center - radius, center - radius, center + radius, center + radius);
-                RectF rectF = new RectF(mBorderWidth / 2, mBorderWidth / 2, getWidth() - mBorderWidth / 2, getHeight() - mBorderWidth / 2);
+        RectF rectF = new RectF(mBorderWidth / 2, mBorderWidth / 2, getWidth() - mBorderWidth / 2, getHeight() - mBorderWidth / 2);
         canvas.drawArc(rectF, 135, 270, false, mOurterPaint);
         //画内圆弧：不能写死，是根据步数计算出来的百分比
         if (mStepMax == 0) return;
         float sweepAngle = (float) mCurrentStep / mStepMax;
-        canvas.drawArc(rectF, 135, sweepAngle*270, false, mInnerPaint);
+        canvas.drawArc(rectF, 135, sweepAngle * 270, false, mInnerPaint);
         //画文字
+        String tipText = "今日步数";
+        @SuppressLint("DrawAllocation")
+        Rect tipBounds = new Rect();
+        mTextPaint.getTextBounds(tipText,0,tipText.length(),tipBounds);
+        int start = getWidth() / 2 - tipBounds.width() / 2;
+        //基线 baseLine
+        Paint.FontMetricsInt metricsInt = mTextPaint.getFontMetricsInt();
+        int dyH = (metricsInt.bottom - metricsInt.top) / 3 - metricsInt.bottom;
+        int baseline = getHeight() / 3 + dyH;
+        canvas.drawText(tipText, start, baseline, mTextPaint);
+        //画步数
         String stepText = String.valueOf(mCurrentStep);
         @SuppressLint("DrawAllocation")
         Rect textBounds = new Rect();
-        mTextPaint.getTextBounds(stepText,0,stepText.length(),textBounds);
-        int dx = getWidth()/2 - textBounds.width()/2;
+        mStepPaint.getTextBounds(stepText, 0, stepText.length(), textBounds);
+        int dx = getWidth() / 2 - textBounds.width() / 2;
         //基线 baseLine
-        Paint.FontMetricsInt fontMetricsInt = mTextPaint.getFontMetricsInt();
-        int dy = (fontMetricsInt.bottom-fontMetricsInt.top)/2 - fontMetricsInt.bottom;
-        int baseLine = getHeight()/2 + dy;
-        canvas.drawText(stepText,dx,baseLine,mTextPaint);
+        Paint.FontMetricsInt fontMetricsInt = mStepPaint.getFontMetricsInt();
+        int dy = (fontMetricsInt.bottom - fontMetricsInt.top) / 2 - fontMetricsInt.bottom;
+        int baseLine = getHeight() / 2 + dy;
+        canvas.drawText(stepText, dx, baseLine, mStepPaint);
     }
 
-    public synchronized void setStepMax(int stepMax){
+    //设置步数最大值
+    public synchronized void setStepMax(int stepMax) {
         this.mStepMax = stepMax;
     }
 
-    public synchronized void setCurrentStep(int currentStep){
+    //设置当前步数
+    public synchronized void setCurrentStep(int currentStep) {
         this.mCurrentStep = currentStep;
         //不断绘制，不断调用onDraw
         invalidate();

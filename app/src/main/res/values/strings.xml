@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">CustomViewProject</string>
+    <string name="app_name">自定义View</string>
+    <string name="title">Android自定义View系列案例</string>
 </resources>

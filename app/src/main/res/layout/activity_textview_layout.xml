@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.jarchie.customview.viewmodel.CommonFinishViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@color/colorPrimary">
+
+            <ImageView
+                android:id="@+id/mBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:onClick="@{()->viewModel.finishActivity()}"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:src="@drawable/icon_back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="自定义TextView"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.jarchie.customview.view.TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:archieText="Jarchie"
+                app:archieTextColor="@color/colorPrimary"
+                app:archieTextSize="20sp" />
+
+            <com.jarchie.customview.view.TextView
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                app:archieText="Jarchie's Github"
+                app:archieTextColor="@color/colorAccent"
+                app:archieTextSize="20sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

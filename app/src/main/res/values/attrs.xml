@@ -21,6 +21,7 @@
         <attr name="innerColor" format="color" />
         <attr name="stepBorderWidth" format="dimension" />
         <attr name="stepTextSize" format="dimension" />
+        <attr name="stepTipSize" format="dimension" />
         <attr name="stepTextColor" format="color" />
     </declare-styleable>
 </resources>
