@@ -26,8 +26,10 @@ public class MainViewModel {
         mList.clear();
         MainBean bean1 = new MainBean("自定义TextView");
         MainBean bean2 = new MainBean("仿QQ运动步数进度效果");
+        MainBean bean3 = new MainBean("滑动字体变色效果");
         mList.add(bean1);
         mList.add(bean2);
+        mList.add(bean3);
         mDataListener.loadMainData(mList);
     }
 

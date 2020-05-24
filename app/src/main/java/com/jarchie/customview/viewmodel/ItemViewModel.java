@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import com.jarchie.customview.activity.ColorTrackTVActivity;
 import com.jarchie.customview.activity.QQStepActivity;
 import com.jarchie.customview.activity.TextViewActivity;
 import com.jarchie.customview.bean.MainBean;
@@ -41,6 +42,9 @@ public class ItemViewModel {
                 break;
             case 1:
                 mContext.startActivity(new Intent(mContext, QQStepActivity.class));
+                break;
+            case 2:
+                mContext.startActivity(new Intent(mContext, ColorTrackTVActivity.class));
                 break;
         }
     }
