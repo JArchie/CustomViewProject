@@ -15,7 +15,6 @@ import androidx.viewpager.widget.ViewPager;
 import com.jarchie.customview.R;
 import com.jarchie.customview.databinding.ActivityColorTrackTvLayoutBinding;
 import com.jarchie.customview.fragment.ItemFragment;
-import com.jarchie.customview.utils.TransferUtil;
 import com.jarchie.customview.view.ColorTrackTextView;
 import com.jarchie.customview.viewmodel.CommonFinishViewModel;
 
